@@ -90,22 +90,62 @@
   };
 
   // Return all elements of an array that pass a truth test.
+
+  //I - Array, function
+  //O - Array
+
+
+
   _.filter = function(collection, test) {
+    var result = [];
+    _.each(collection, function(val) {
+      if (test(val)) {
+        result.push(val);
+      }
+    });
+    return result;
   };
+
+
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
+    var res = [];
+    var ignore = _.filter(collection, test);
+    _.each(collection, function(val) {
+      if (!ignore.includes(val)) {
+        res.push(val);
+      }
+    });
+    return res;
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
   };
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array, isSorted, iterator) {
+  _.uniq = function(array, iterator) {
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+    var transformArr = [];
+    var originalArr = [];
+    _.each(array, function(val) {
+      if (!transformArr.includes(iterator(val))) {
+        transformArr.push(iterator(val));
+        originalArr.push(val);
+      }
+    });
+    return originalArr;
   };
 
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
+    var res = [];
+    _.each(collection, function(val) {
+      res.push(iterator(val));
+    });
+    return res;
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
@@ -149,7 +189,34 @@
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
+
+
+  //I - Array, Object && function && any type
+  //O - Accumulator
+  //E - If accumulator undefined start at zero
+  //C - Don't use non underbar methods
+
+  // Example:
+  //   var numbers = [1,2,3];
+  //   var sum = _.reduce(numbers, function(total, number){
+  //     return total + number;
+  //   }, 0); // should be 6
+
+  //val = 1
+  //accumulator = 0
+  //return accumulator = function(0, 1) === 0 + 1 = 1
+
+  //accumulator = 1
+
   _.reduce = function(collection, iterator, accumulator) {
+    if (accumulator === undefined) {
+      accumulator = collection[0];
+      collection = collection.slice(1);
+    }
+    _.each(collection, function(val) {
+      accumulator = iterator(accumulator, val);
+    });
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
