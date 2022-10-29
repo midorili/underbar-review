@@ -202,11 +202,7 @@
   //     return total + number;
   //   }, 0); // should be 6
 
-  //val = 1
-  //accumulator = 0
-  //return accumulator = function(0, 1) === 0 + 1 = 1
 
-  //accumulator = 1
 
   _.reduce = function(collection, iterator, accumulator) {
     if (accumulator === undefined) {
@@ -234,12 +230,33 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+    return _.reduce(collection, function(isTrue, val) {
+      if (!iterator(val)) {
+        isTrue = false;
+      }
+      return isTrue;
+    }, true);
     // TIP: Try re-using reduce() here.
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
+
+
+
   _.some = function(collection, iterator) {
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+    return _.reduce(collection, function(isFalse, val) {
+      if (iterator(val)) {
+        isFalse = true;
+      }
+      return isFalse;
+    }, false);
     // TIP: There's a very clever way to re-use every() here.
   };
 
@@ -262,14 +279,36 @@
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
+
   _.extend = function(obj) {
+    _.each(arguments, function(currObj, index) {
+      if (index !== 0) {
+        _.each(currObj, function(val, key) {
+          obj[key] = val;
+        });
+      }
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
+  //[{a:false}, {a:1}, {a:4, b:2}]
   _.defaults = function(obj) {
+    _.each(arguments, function(currObj, index) {
+      for (var key in currObj) {
+        if (obj[key] === undefined) {
+          obj[key] = currObj[key];
+        }
+      }
+    });
+    return obj;
   };
 
+  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   /**
    * FUNCTIONS
