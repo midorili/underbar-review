@@ -305,11 +305,6 @@
     return obj;
   };
 
-  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //REMEMBER TO PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   /**
    * FUNCTIONS
    * =========
@@ -320,6 +315,7 @@
 
   // Return a function that can be called at most one time. Subsequent calls
   // should return the previously returned value.
+
   _.once = function(func) {
     // TIP: These variables are stored in a "closure scope" (worth researching),
     // so that they'll remain available to the newly-generated function every
@@ -349,8 +345,20 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+
   _.memoize = function(func) {
+    var cache = {};
+    return function() {
+      var argsJSON = JSON.stringify(arguments);
+      var res;
+      if (cache[argsJSON] === undefined) {
+        res = func.apply(this, arguments);
+        cache[argsJSON] = res;
+      }
+      return cache[argsJSON];
+    };
   };
+
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -358,7 +366,9 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
+
   _.delay = function(func, wait) {
+    return setTimeout.apply(null, arguments);
   };
 
 
@@ -372,7 +382,21 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+
+
+
   _.shuffle = function(array) {
+    var res = [];
+    var arrayCopy = array.slice();
+    var randomize = function(arrayLength) {
+      return Math.floor(Math.random() * arrayLength);
+    };
+    for (var i = 0; i < array.length; i++) {
+      var index = randomize(arrayCopy.length);
+      res.push(arrayCopy[index]);
+      arrayCopy.splice(index, 1);
+    }
+    return res;
   };
 
 
